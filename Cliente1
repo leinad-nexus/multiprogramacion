@@ -1,0 +1,60 @@
+package Multiprogramacion1;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Daniel Lloa Nexus
+ */
+public class Cliente1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws IOException {
+
+        final int PUERTO_SERVIDOR = 5000;
+        byte[] buffer = new byte[1024];
+        try {
+
+            InetAdress direccion = InetAdress.getByName("localhost");
+            DatagramSocket socketUDP = new DatagramSocket();
+
+            String mensaje = "HOLA MUNDO DESDE EL CLIENTE";
+            buffer = mensaje.getBytes();
+            InetAddress direccionServidor = null;
+
+            DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+            System.out.println("ENVIO EL DATAGRAMA");
+            socketUDP.send(pregunta);
+
+            DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+            socketUDP.receive(peticion);
+            System.out.println("RECIBO LA PETICION");
+
+            mensaje = new String(peticion.getData());
+            System.out.println(mensaje);
+
+            socketUDP.close();
+
+        } catch (SocketException ex) {
+            Logger.getLogger(Cliente1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static class InetAdress {
+
+        private static InetAdress getByName(String localhost) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+ 
+    }
+
+}
