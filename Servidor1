@@ -1,0 +1,50 @@
+package Multiprogramacion1;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Daniel Lloa Nexus
+ */
+public class Servidor1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args, int puerto) throws IOException {
+
+        // TODO code application logic here
+        final int PUERTO = 5000;
+        byte[] buffer = new byte[1024];
+        try {
+            System.out.println("INICIADO EL SERVIDOR UDP");
+            DatagramSocket socketUDP = new DatagramSocket(PUERTO);
+            while (true) {
+                DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+                socketUDP.receive(peticion);
+
+                String mensaje = new String(peticion.getData());
+                System.out.println(mensaje);
+
+                int puertoCliente = peticion.getPort();
+                InetAddress direccion = peticion.getAddress();
+
+                mensaje = "HOLA MUNDO DESDE EL SERVIDOR";
+                buffer = mensaje.getBytes();
+                              DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, puerto);
+                System.out.println("ENVIO LA INFORMACION DEL CLIENTE");
+                socketUDP.send(respuesta);
+            }
+
+        } catch (SocketException ex) {
+            Logger.getLogger(Servidor1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+}
